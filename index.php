@@ -1,25 +1,23 @@
 <?php
 session_start();
 
-// Проверка авторизации
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit();
-}
+$_SESSION['login_time'] = time();
 
-// // Обработка выхода из системы
-// if (isset($_POST['logout'])) {
-//     session_destroy();
-//     header("Location: login.php");
-//     exit();
-// }
+
+require 'function.php';
 
 // Рассчет времени до окончания акции
 $loginTime = $_SESSION['login_time'];
 $remainingTime = 86400 - (time() - $loginTime);
-$hours = floor($remainingTime / 3600);
-$minutes = floor(($remainingTime % 3600) / 60);
-$seconds = $remainingTime % 60;
+if ($remainingTime > 0) {
+    $hours = floor($remainingTime / 3600);
+    $minutes = floor(($remainingTime % 3600) / 60);
+    $seconds = $remainingTime % 60;
+} else {
+    $hours = 0;
+    $minutes = 0;
+    $seconds = 0;
+}
 
 // Проверка, установлен ли день рождения пользователя
 if (isset($_SESSION['birthday'])) {
@@ -64,14 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="POST" action="">
         <label for="birthday">Внесите дату своего рождения:</label>
         <input type="date" id="birthday" name="birthday" required><br><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Ввести">
     </form>
     <h2>Фотографии нашего SPA-салона:</h2>
-    <img src="spa_photo1.jpg" alt="Фото SPA-салона 1" width="400" height="300">
-    <img src="spa_photo2.jpg" alt="Фото SPA-салона 2" width="400" height="300">
+    <img src="spa_photo1.jpg.jpg" alt="Фото SPA-салона 1" width="400" height="300">
+    <img src="spa_photo2.jpg.jpeg" alt="Фото SPA-салона 2" width="400" height="300">
 
-    <form method="POST" action="login.php">
-        <input type="submit" name="Выход" value="Logout">
+    <form method="POST" action="logout.php">
+        <input type="submit" name="logout" value="Выйти">
     </form>
 </body>
 </html>

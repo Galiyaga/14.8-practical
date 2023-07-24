@@ -26,6 +26,7 @@ $users = array(
     )
 );
 
+
 function getUsersList() {
     global $users;
     $userList = array();
@@ -49,15 +50,26 @@ function existsUser($login) {
     return false;
 }
 
-function checkPassword($login, $password) {
+function addUser($login, $password) {
     global $users;
-    foreach ($users as $user) {
+    // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $users[] = array(
+        'login' => $login,
+        'password' => $password
+    );
+}
+
+
+function checkPassword($login, $password) {
+    $userList = getUsersList();
+    foreach ($userList as $user) {
         if ($user['login'] === $login) {
-            return password_verify($password, $user['password']);
+            return password_verify($password, $user['passwordHash']);
         }
     }
     return false;
 }
+
 
 function getCurrentUser() {
     session_start();
@@ -67,13 +79,6 @@ function getCurrentUser() {
     return null;
 }
 
-function addUser($login, $password) {
-    global $users;
-    $users[] = array(
-        'login' => $login,
-        'password' => $password
-    );
-}
 
 function calculateDaysUntilBirthday($birthday) {
     $today = new DateTime();

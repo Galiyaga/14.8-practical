@@ -7,7 +7,20 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
+// Обработка выхода из системы
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+require 'function.php';
+
 // Обработка отправки формы 
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     echo "Form submitted"; // Оператор отладки
+// }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = $_POST['login'];
     $password = $_POST['password'];
@@ -21,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Неверный логин или пароль";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -33,13 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if (isset($error)) { ?>
         <p><?php echo $error; ?></p>
     <?php } ?>
-    <form method="POST" action="index.php">
+    <form method="POST" action=>
         <label for="login">Логин:</label>
         <input type="text" id="login" name="login" required><br><br>
         <label for="password">Пароль:</label>
         <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Login">
+        <input type="submit" name="submit" value="Войти">
     </form>
     <p>Нет личного кабинета?<a href="registration.php">Зарегистрироваться</a></p>
 </body>
 </html>
+
+
